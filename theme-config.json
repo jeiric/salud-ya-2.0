@@ -1,0 +1,201 @@
+{
+  "appName": "SaludYa",
+  "appDescription": "Sistema de Gestión de Citas Médicas",
+
+  "colors": {
+    "primary": {
+      "main": "#0ea5e9",
+      "dark": "#0284c7",
+      "light": "#e0f2fe",
+      "description": "Color principal - Usado en botones, encabezados (Azul actual)"
+    },
+    "secondary": {
+      "main": "#10b981",
+      "dark": "#059669",
+      "light": "#d1fae5",
+      "description": "Color secundario - Panel médico (Verde actual)"
+    },
+    "accent": {
+      "main": "#8b5cf6",
+      "dark": "#7c3aed",
+      "description": "Color de acento - Detalles especiales (Morado)"
+    },
+    "states": {
+      "success": "#10b981",
+      "warning": "#f59e0b",
+      "error": "#ef4444",
+      "info": "#3b82f6"
+    }
+  },
+
+  "typography": {
+    "fonts": {
+      "primary": {
+        "name": "System UI",
+        "family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+        "googleFontUrl": null,
+        "description": "Fuente para texto general"
+      },
+      "heading": {
+        "name": "System UI",
+        "family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        "googleFontUrl": null,
+        "description": "Fuente para títulos y encabezados"
+      }
+    },
+    "sizes": {
+      "xs": "0.75rem",
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem",
+      "5xl": "3rem",
+      "description": "Tamaños de texto (1rem = 16px)"
+    },
+    "weights": {
+      "normal": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    }
+  },
+
+  "spacing": {
+    "description": "Espaciado general (1rem = 16px)",
+    "scale": {
+      "xs": "0.25rem",
+      "sm": "0.5rem",
+      "md": "1rem",
+      "lg": "1.5rem",
+      "xl": "2rem",
+      "2xl": "3rem",
+      "3xl": "4rem"
+    }
+  },
+
+  "effects": {
+    "borderRadius": {
+      "sm": "0.375rem",
+      "md": "0.5rem",
+      "lg": "0.75rem",
+      "xl": "1rem",
+      "description": "Redondeo de esquinas"
+    },
+    "shadows": {
+      "sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+      "md": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+      "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+      "xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+      "description": "Sombras para profundidad"
+    },
+    "transitions": {
+      "fast": "150ms",
+      "normal": "200ms",
+      "slow": "300ms"
+    }
+  },
+
+  "components": {
+    "header": {
+      "height": "4rem",
+      "backgroundColor": "rgba(255, 255, 255, 0.8)",
+      "blur": "12px"
+    },
+    "button": {
+      "paddingX": "1.5rem",
+      "paddingY": "0.625rem",
+      "fontWeight": 500,
+      "borderRadius": "md"
+    },
+    "card": {
+      "padding": "1.5rem",
+      "borderWidth": "1px",
+      "shadow": "sm",
+      "hoverShadow": "lg"
+    },
+    "input": {
+      "paddingX": "0.75rem",
+      "paddingY": "0.5rem",
+      "borderWidth": "1px"
+    }
+  },
+
+  "icons": {
+    "sizes": {
+      "sm": "1rem",
+      "md": "1.25rem",
+      "lg": "1.5rem",
+      "xl": "2rem"
+    },
+    "library": "lucide-react",
+    "libraryUrl": "https://lucide.dev/icons"
+  },
+
+  "presets": {
+    "description": "Temas predefinidos - Copia y pega los colores en la sección 'colors'",
+    "themes": {
+      "medico_profesional": {
+        "name": "Médico Profesional",
+        "colors": {
+          "primary": { "main": "#0ea5e9", "dark": "#0284c7", "light": "#e0f2fe" },
+          "secondary": { "main": "#10b981", "dark": "#059669", "light": "#d1fae5" }
+        }
+      },
+      "moderno_vibrante": {
+        "name": "Moderno Vibrante",
+        "colors": {
+          "primary": { "main": "#8b5cf6", "dark": "#7c3aed", "light": "#ede9fe" },
+          "secondary": { "main": "#ec4899", "dark": "#db2777", "light": "#fce7f3" }
+        }
+      },
+      "minimalista_elegante": {
+        "name": "Minimalista Elegante",
+        "colors": {
+          "primary": { "main": "#111827", "dark": "#030712", "light": "#f3f4f6" },
+          "secondary": { "main": "#6b7280", "dark": "#4b5563", "light": "#e5e7eb" }
+        }
+      },
+      "calido_acogedor": {
+        "name": "Cálido y Acogedor",
+        "colors": {
+          "primary": { "main": "#f97316", "dark": "#ea580c", "light": "#ffedd5" },
+          "secondary": { "main": "#eab308", "dark": "#ca8a04", "light": "#fef9c3" }
+        }
+      }
+    }
+  },
+
+  "customFonts": {
+    "description": "Fuentes populares de Google Fonts - Agrega la URL en googleFontUrl",
+    "options": {
+      "inter": {
+        "name": "Inter",
+        "family": "'Inter', sans-serif",
+        "googleFontUrl": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      },
+      "poppins": {
+        "name": "Poppins",
+        "family": "'Poppins', sans-serif",
+        "googleFontUrl": "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      },
+      "roboto": {
+        "name": "Roboto",
+        "family": "'Roboto', sans-serif",
+        "googleFontUrl": "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      },
+      "montserrat": {
+        "name": "Montserrat",
+        "family": "'Montserrat', sans-serif",
+        "googleFontUrl": "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      },
+      "nunito": {
+        "name": "Nunito",
+        "family": "'Nunito', sans-serif",
+        "googleFontUrl": "https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap"
+      }
+    }
+  }
+}
