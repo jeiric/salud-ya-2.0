@@ -23,6 +23,7 @@ export interface Appointment {
 interface AppointmentContextType {
   patientData: PatientData | null;
   appointments: Appointment[];
+  currentBooking: Appointment | null;
   setPatientData: (data: PatientData) => void;
   addAppointment: (specialty: string, doctor: string, date: Date, time: string) => void;
   updateAppointmentStatus: (id: string, status: 'confirmada' | 'pendiente' | 'cancelada') => void;
@@ -68,6 +69,7 @@ const mockAppointments: Appointment[] = [
 export function AppointmentProvider({ children }: { children: ReactNode }) {
   const [patientData, setPatientData] = useState<PatientData | null>(null);
   const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
+  const [currentBooking, setCurrentBooking] = useState<Appointment | null>(null);
 
   // Agrega una nueva cita al listado usando los datos acumulados del formulario
   const addAppointment = (specialty: string, doctor: string, date: Date, time: string) => {
@@ -87,6 +89,7 @@ export function AppointmentProvider({ children }: { children: ReactNode }) {
     };
 
     setAppointments((prev) => [newAppointment, ...prev]);
+    setCurrentBooking(newAppointment);
   };
 
   // Modifica el estado de una cita desde las acciones del administrador
@@ -98,6 +101,7 @@ export function AppointmentProvider({ children }: { children: ReactNode }) {
 
   const resetAppointment = () => {
     setPatientData(null);
+    setCurrentBooking(null);
   };
 
   return (
@@ -105,6 +109,7 @@ export function AppointmentProvider({ children }: { children: ReactNode }) {
       value={{
         patientData,
         appointments,
+        currentBooking,
         setPatientData,
         addAppointment,
         updateAppointmentStatus,

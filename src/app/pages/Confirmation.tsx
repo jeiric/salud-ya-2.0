@@ -10,10 +10,9 @@ import { es } from 'date-fns/locale';
 export default function Confirmation() {
   const navigate = useNavigate();
   // 👈 Obtenemos la lista acumulada de citas y la función de reinicio
-  const { patientData, appointments, resetAppointment } = useAppointment();
+  const { patientData, currentBooking, resetAppointment } = useAppointment();
 
-  // Tomamos la última cita registrada (la primera en el arreglo de memoria)
-  const latestAppointment = appointments[0];
+  const latestAppointment = currentBooking;
 
   useEffect(() => {
     if (!patientData || !latestAppointment) {
