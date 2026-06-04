@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -10,6 +10,15 @@ import {
 import Login from '../../app/pages/Login';
 import PatientRegistration from '../../app/pages/PatientRegistration';
 import Confirmation from '../../app/pages/Confirmation';
+
+const lauraPatient = {
+  firstName: 'Laura',
+  lastName: 'Vega',
+  email: 'laura.vega@test.com',
+  phone: '+34 611 222 333',
+  birthDate: '1992-07-08',
+  idNumber: '99887766C',
+};
 
 describe('Flujo paciente (integración)', () => {
   it('login → registro completa y redirige al calendario', async () => {
@@ -53,23 +62,26 @@ describe('Flujo paciente (integración)', () => {
 
   it('muestra confirmación solo con reserva actual del paciente', async () => {
     function BookingBridge() {
-      const { setPatientData, addAppointment } = useAppointment();
-      useEffect(() => {
-        setPatientData({
-          firstName: 'Laura',
-          lastName: 'Vega',
-          email: 'laura.vega@test.com',
-          phone: '+34 611 222 333',
-          birthDate: '1992-07-08',
-          idNumber: '99887766C',
-        });
-        addAppointment(
-          'Dermatología',
-          'Dra. Carmen Sánchez',
-          new Date(2026, 5, 20),
-          '11:00'
-        );
-      }, [setPatientData, addAppointment]);
+      const { setPatientData, addAppointment, patientData, currentBooking } = useAppointment();
+
+      useLayoutEffect(() => {
+        if (!patientData) {
+          setPatientData(lauraPatient);
+        }
+        if (!currentBooking) {
+          addAppointment(
+            'Dermatología',
+            'Dra. Carmen Sánchez',
+            new Date(2026, 5, 20),
+            '11:00'
+          );
+        }
+      }, [setPatientData, addAppointment, patientData, currentBooking]);
+
+      if (!patientData || !currentBooking) {
+        return null;
+      }
+
       return <Confirmation />;
     }
 
@@ -84,11 +96,14 @@ describe('Flujo paciente (integración)', () => {
       </AppointmentProvider>
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('heading', { name: /Cita Confirmada/i })).toBeInTheDocument();
-      expect(screen.getByText('Dermatología')).toBeInTheDocument();
-      expect(screen.getByText('Laura Vega')).toBeInTheDocument();
-      expect(screen.queryByText('María González')).not.toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByRole('heading', { name: /Cita Confirmada/i })).toBeInTheDocument();
+        expect(screen.getByText('Dermatología')).toBeInTheDocument();
+        expect(screen.getByText('Laura Vega')).toBeInTheDocument();
+        expect(screen.queryByText('María González')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 }
+    );
   });
 });

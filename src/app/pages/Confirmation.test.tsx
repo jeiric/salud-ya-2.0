@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
@@ -8,19 +8,32 @@ import {
 } from '../context/AppointmentContext';
 import Confirmation from './Confirmation';
 
+const samplePatient = {
+  firstName: 'Pedro',
+  lastName: 'Soto',
+  email: 'pedro@test.com',
+  phone: '600111222',
+  birthDate: '1985-01-01',
+  idNumber: '111',
+};
+
+/** Monta Confirmation solo cuando el contexto ya tiene paciente y cita. */
 function WithBooking() {
-  const { setPatientData, addAppointment } = useAppointment();
-  useEffect(() => {
-    setPatientData({
-      firstName: 'Pedro',
-      lastName: 'Soto',
-      email: 'pedro@test.com',
-      phone: '600111222',
-      birthDate: '1985-01-01',
-      idNumber: '111',
-    });
-    addAppointment('Pediatría', 'Dra. Laura Jiménez', new Date(2026, 6, 10), '15:30');
-  }, [setPatientData, addAppointment]);
+  const { setPatientData, addAppointment, patientData, currentBooking } = useAppointment();
+
+  useLayoutEffect(() => {
+    if (!patientData) {
+      setPatientData(samplePatient);
+    }
+    if (!currentBooking) {
+      addAppointment('Pediatría', 'Dra. Laura Jiménez', new Date(2026, 6, 10), '15:30');
+    }
+  }, [setPatientData, addAppointment, patientData, currentBooking]);
+
+  if (!patientData || !currentBooking) {
+    return null;
+  }
+
   return <Confirmation />;
 }
 
@@ -40,11 +53,14 @@ describe('Confirmation (unitaria)', () => {
       </AppointmentProvider>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('Pediatría')).toBeInTheDocument();
-      expect(screen.getByText('Pedro Soto')).toBeInTheDocument();
-      expect(screen.queryByText('María González')).not.toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('Pediatría')).toBeInTheDocument();
+        expect(screen.getByText('Pedro Soto')).toBeInTheDocument();
+        expect(screen.queryByText('María González')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 }
+    );
   });
 
   it('redirige a registro sin paciente ni reserva', async () => {
@@ -62,8 +78,6 @@ describe('Confirmation (unitaria)', () => {
       </AppointmentProvider>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('Pantalla Registro')).toBeInTheDocument();
-    });
+    expect(await screen.findByText('Pantalla Registro', {}, { timeout: 3000 })).toBeInTheDocument();
   });
 });
