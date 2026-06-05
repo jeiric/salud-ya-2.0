@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
@@ -105,5 +105,31 @@ describe('Confirmation (unitaria)', () => {
     );
 
     expect(await screen.findByText('Pantalla Registro', {}, { timeout: 3000 })).toBeInTheDocument();
+  });
+
+  it('llama a window.print al pulsar Imprimir Confirmación', async () => {
+    const printSpy = vi.spyOn(window, 'print').mockImplementation(() => undefined);
+    const user = userEvent.setup();
+
+    const router = createMemoryRouter(
+      [
+        { path: '/confirmacion', element: <WithBooking /> },
+        { path: '/registro', element: <div>Registro</div> },
+      ],
+      { initialEntries: ['/confirmacion'] }
+    );
+
+    render(
+      <AppointmentProvider>
+        <RouterProvider router={router} />
+      </AppointmentProvider>
+    );
+
+    await waitFor(() => expect(screen.getByText('Imprimir Confirmación')).toBeInTheDocument(), {
+      timeout: 3000,
+    });
+
+    await user.click(screen.getByRole('button', { name: /Imprimir Confirmación/i }));
+    expect(printSpy).toHaveBeenCalled();
   });
 });
