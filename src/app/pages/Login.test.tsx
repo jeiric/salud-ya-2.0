@@ -64,4 +64,40 @@ describe('Login (unitaria)', () => {
       expect.stringContaining('Credenciales incorrectas')
     );
   });
+
+  it('no navega si paciente no ingresa correo', async () => {
+    const user = userEvent.setup();
+    renderLogin();
+
+    const submitButton = screen.getByRole('button', { name: /Agendar Cita/i });
+    const form = submitButton.closest('form');
+    if (form) {
+      form.noValidate = true;
+    }
+
+    await user.click(submitButton);
+
+    expect(screen.queryByText('Registro Paciente')).not.toBeInTheDocument();
+  });
+
+  it('no inicia sesión staff si falta contraseña', async () => {
+    const user = userEvent.setup();
+    const alertSpy = vi.spyOn(window, 'alert');
+    renderLogin();
+
+    await user.click(screen.getByRole('tab', { name: /Personal Médico/i }));
+    await user.type(screen.getByLabelText(/Correo Electrónico/i), 'admin@saludya.com');
+
+    const submitButton = screen.getByRole('button', { name: /Iniciar Sesión/i });
+    const form = submitButton.closest('form');
+    if (form) {
+      form.noValidate = true;
+    }
+
+    await user.click(submitButton);
+
+    expect(alertSpy).not.toHaveBeenCalled();
+    expect(localStorage.getItem('userRole')).toBeNull();
+    expect(screen.queryByText('Dashboard Admin')).not.toBeInTheDocument();
+  });
 });
