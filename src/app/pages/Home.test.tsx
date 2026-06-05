@@ -32,4 +32,22 @@ describe('Home (unitaria)', () => {
     await user.click(screen.getAllByRole('button', { name: /Agendar Cita/i })[0]);
     expect(await screen.findByText('Página Login')).toBeInTheDocument();
   });
+
+  it('navega a login al pulsar Comenzar Ahora', async () => {
+    const user = userEvent.setup();
+    const router = createMemoryRouter(
+      [
+        { path: '/', element: <Home /> },
+        { path: '/login', element: <div>Página Login</div> },
+      ],
+      { initialEntries: ['/'] }
+    );
+    render(<RouterProvider router={router} />);
+
+    const comenzarButtons = screen.getAllByRole('button', { name: /Comenzar Ahora/i });
+    expect(comenzarButtons).toHaveLength(2);
+    await user.click(comenzarButtons[0]);
+
+    expect(await screen.findByText('Página Login')).toBeInTheDocument();
+  });
 });
