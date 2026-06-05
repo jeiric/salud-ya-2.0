@@ -27,6 +27,10 @@ const monthlyTrend = [
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
+export function formatSpecialtyLabel({ name, percent }: { name: string; percent: number }) {
+  return `${name}: ${((percent || 0) * 100).toFixed(0)}%`;
+}
+
 export default function Statistics() {
   return (
     <div className="space-y-6">
@@ -98,7 +102,7 @@ export default function Statistics() {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name}: ${((percent || 0) * 100).toFixed(0)}%`}
+                  label={formatSpecialtyLabel}
 
                   outerRadius={80}
                   fill="#8884d8"
