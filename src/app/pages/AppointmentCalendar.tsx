@@ -51,6 +51,31 @@ const availableTimes = [
   '18:30',
 ];
 
+export function canSubmitAppointment(
+  specialty: string,
+  doctor: string,
+  selectedDate: Date | undefined,
+  selectedTime: string
+) {
+  return Boolean(specialty && doctor && selectedDate && selectedTime);
+}
+
+export function processAppointmentSubmission(
+  specialty: string,
+  doctor: string,
+  selectedDate: Date | undefined,
+  selectedTime: string,
+  addAppointment: (specialty: string, doctor: string, date: Date, time: string) => void,
+  navigate: (path: string) => void
+) {
+  if (canSubmitAppointment(specialty, doctor, selectedDate, selectedTime)) {
+    addAppointment(specialty, doctor, selectedDate, selectedTime);
+    navigate('/confirmacion');
+    return true;
+  }
+  return false;
+}
+
 export default function AppointmentCalendar() {
   const navigate = useNavigate();
   const { patientData, addAppointment } = useAppointment(); // 👈 Conectado a la lista acumulativa
@@ -71,14 +96,18 @@ export default function AppointmentCalendar() {
     setDoctor(''); // Reset doctor when specialty changes
   };
 
-   const handleSubmit = () => {
-    if (specialty && doctor && selectedDate && selectedTime) {
-      addAppointment(specialty, doctor, selectedDate, selectedTime);
-      navigate('/confirmacion'); // 👈 ¡Devuelto a la pantalla de confirmación!
-    }
+  const handleSubmit = () => {
+    processAppointmentSubmission(
+      specialty,
+      doctor,
+      selectedDate,
+      selectedTime,
+      addAppointment,
+      navigate
+    );
   };
 
-  const isFormValid = specialty && doctor && selectedDate && selectedTime;
+  const isFormValid = canSubmitAppointment(specialty, doctor, selectedDate, selectedTime);
 
   // Disable past dates
   const disabledDates = (date: Date) => {
