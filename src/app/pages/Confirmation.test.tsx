@@ -1,6 +1,7 @@
 import React, { useLayoutEffect } from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import {
   AppointmentProvider,
@@ -61,6 +62,31 @@ describe('Confirmation (unitaria)', () => {
       },
       { timeout: 3000 }
     );
+  });
+
+  it('redirige a registro y resetea la cita al pulsar Agendar Nueva Cita', async () => {
+    const user = userEvent.setup();
+    const router = createMemoryRouter(
+      [
+        { path: '/confirmacion', element: <WithBooking /> },
+        { path: '/registro', element: <div>Pantalla Registro</div> },
+      ],
+      { initialEntries: ['/confirmacion'] }
+    );
+
+    render(
+      <AppointmentProvider>
+        <RouterProvider router={router} />
+      </AppointmentProvider>
+    );
+
+    await waitFor(
+      () => expect(screen.getByText('Agendar Nueva Cita')).toBeInTheDocument(),
+      { timeout: 3000 }
+    );
+
+    await user.click(screen.getByRole('button', { name: /Agendar Nueva Cita/i }));
+    expect(await screen.findByText('Pantalla Registro', {}, { timeout: 3000 })).toBeInTheDocument();
   });
 
   it('redirige a registro sin paciente ni reserva', async () => {
