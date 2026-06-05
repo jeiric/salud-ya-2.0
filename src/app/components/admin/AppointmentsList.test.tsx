@@ -1,8 +1,33 @@
-import { describe, it, expect } from 'vitest';
+import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
 import { AppointmentProvider } from '../../context/AppointmentContext';
 import AppointmentsList from './AppointmentsList';
+
+it('muestra Badge por defecto para estado desconocido (mock local)', async () => {
+  const AppointmentModule = await import('../../context/AppointmentContext');
+  const spy = vi.spyOn(AppointmentModule, 'useAppointment').mockReturnValue({
+    appointments: [
+      {
+        id: 'x',
+        patientName: 'Paciente Prueba',
+        email: 'p@e.com',
+        phone: '000',
+        specialty: 'Prueba',
+        doctor: 'Dr Test',
+        date: new Date(),
+        status: 'desconocido',
+      },
+    ],
+    updateAppointmentStatus: vi.fn(),
+  } as any);
+
+  render(<AppointmentsList />);
+  expect(screen.getByText('desconocido')).toBeTruthy();
+
+  spy.mockRestore();
+});
 
 describe('AppointmentsList (unitaria)', () => {
   it('lista citas mock y permite buscar por paciente', async () => {
