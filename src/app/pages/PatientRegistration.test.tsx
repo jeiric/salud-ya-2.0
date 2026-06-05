@@ -63,4 +63,36 @@ describe('PatientRegistration (unitaria)', () => {
       expect(screen.getByText('Calendario Citas')).toBeInTheDocument();
     });
   });
+
+  it('limpia el error de nombre cuando el usuario corrige el campo', async () => {
+    const user = userEvent.setup();
+    renderRegistration();
+
+    await user.click(screen.getByRole('button', { name: /Continuar/i }));
+
+    expect(await screen.findByText('El nombre es requerido')).toBeInTheDocument();
+
+    await user.type(screen.getByLabelText(/^Nombre/i), 'Ana');
+    expect(screen.queryByText('El nombre es requerido')).not.toBeInTheDocument();
+  });
+
+  it('navega a login al pulsar Volver', async () => {
+    const user = userEvent.setup();
+    const router = createMemoryRouter(
+      [
+        { path: '/registro', element: <PatientRegistration /> },
+        { path: '/login', element: <div>Página Login</div> },
+      ],
+      { initialEntries: ['/registro'] }
+    );
+
+    render(
+      <AppointmentProvider>
+        <RouterProvider router={router} />
+      </AppointmentProvider>
+    );
+
+    await user.click(screen.getByRole('button', { name: /Volver/i }));
+    expect(await screen.findByText('Página Login')).toBeInTheDocument();
+  });
 });
