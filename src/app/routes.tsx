@@ -8,7 +8,7 @@ import AppointmentCalendar from './pages/AppointmentCalendar';
 import Confirmation from './pages/Confirmation';
 import Dashboard from './pages/admin/Dashboard';
 
-export const router = createBrowserRouter([
+export const routes = [
   {
     path: '/',
     element: <Home />,
@@ -44,4 +44,6 @@ export const router = createBrowserRouter([
       </div>
     ),
   },
-]);
+];
+
+export const router = createBrowserRouter(routes);
