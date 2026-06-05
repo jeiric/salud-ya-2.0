@@ -8,7 +8,10 @@ import {
   useAppointment,
   type PatientData,
 } from '../context/AppointmentContext';
-import AppointmentCalendar from './AppointmentCalendar';
+import AppointmentCalendar, {
+  canSubmitAppointment,
+  processAppointmentSubmission,
+} from './AppointmentCalendar';
 
 const samplePatient: PatientData = {
   firstName: 'Carlos',
@@ -121,5 +124,27 @@ describe('AppointmentCalendar (unitaria)', () => {
     await user.click(screen.getByRole('button', { name: /Volver/i }));
 
     expect(await screen.findByText('Pantalla Registro')).toBeInTheDocument();
+  });
+
+  it('navega a registro al pulsar Cancelar inferior', async () => {
+    const user = userEvent.setup();
+    renderCalendarRoute();
+
+    await screen.findByText('Agendar Cita Médica');
+    await user.click(screen.getByRole('button', { name: /Cancelar/i }));
+
+    expect(await screen.findByText('Pantalla Registro')).toBeInTheDocument();
+  });
+
+  it('valida el estado del formulario y no procesa una cita inválida', () => {
+    expect(canSubmitAppointment('', '', undefined, '')).toBe(false);
+
+    const addSpy = vi.fn();
+    const navigateSpy = vi.fn();
+    expect(
+      processAppointmentSubmission('', '', undefined, '', addSpy, navigateSpy)
+    ).toBe(false);
+    expect(addSpy).not.toHaveBeenCalled();
+    expect(navigateSpy).not.toHaveBeenCalled();
   });
 });
