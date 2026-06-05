@@ -37,24 +37,28 @@ const scheduleByDoctor: Record<string, any[]> = {
   ],
 };
 
+export function getScheduleForDoctor(selectedDoctor: string) {
+  return scheduleByDoctor[selectedDoctor] || [];
+}
+
+export function getStatusColor(status: string) {
+  switch (status) {
+    case 'confirmada':
+      return 'bg-green-100 text-green-700 border-green-300';
+    case 'pendiente':
+      return 'bg-yellow-100 text-yellow-700 border-yellow-300';
+    case 'available':
+      return 'bg-gray-100 text-gray-500 border-gray-300';
+    default:
+      return 'bg-gray-100 text-gray-700';
+  }
+}
+
 export default function DoctorSchedule() {
   const [selectedDoctor, setSelectedDoctor] = useState(doctors[0]);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date(2026, 3, 5));
 
-  const schedule = scheduleByDoctor[selectedDoctor] || [];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'confirmada':
-        return 'bg-green-100 text-green-700 border-green-300';
-      case 'pendiente':
-        return 'bg-yellow-100 text-yellow-700 border-yellow-300';
-      case 'available':
-        return 'bg-gray-100 text-gray-500 border-gray-300';
-      default:
-        return 'bg-gray-100 text-gray-700';
-    }
-  };
+  const schedule = getScheduleForDoctor(selectedDoctor);
 
   return (
     <div className="space-y-6">
