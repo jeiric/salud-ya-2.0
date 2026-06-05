@@ -95,4 +95,24 @@ describe('PatientRegistration (unitaria)', () => {
     await user.click(screen.getByRole('button', { name: /Volver/i }));
     expect(await screen.findByText('Página Login')).toBeInTheDocument();
   });
+
+  it('navega a home al pulsar Cancelar inferior', async () => {
+    const user = userEvent.setup();
+    const router = createMemoryRouter(
+      [
+        { path: '/', element: <div>Página Home</div> },
+        { path: '/registro', element: <PatientRegistration /> },
+      ],
+      { initialEntries: ['/registro'] }
+    );
+
+    render(
+      <AppointmentProvider>
+        <RouterProvider router={router} />
+      </AppointmentProvider>
+    );
+
+    await user.click(screen.getByRole('button', { name: /Cancelar/i }));
+    expect(await screen.findByText('Página Home')).toBeInTheDocument();
+  });
 });
