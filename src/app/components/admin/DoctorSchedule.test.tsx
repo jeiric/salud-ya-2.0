@@ -1,7 +1,17 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import DoctorSchedule from './DoctorSchedule';
+import DoctorSchedule, { getScheduleForDoctor, getStatusColor } from './DoctorSchedule';
+
+describe('DoctorSchedule helpers', () => {
+  it('getScheduleForDoctor devuelve arreglo vacío para médico desconocido', () => {
+    expect(getScheduleForDoctor('Dr. Unknown')).toEqual([]);
+  });
+
+  it('getStatusColor devuelve clase por defecto para estado desconocido', () => {
+    expect(getStatusColor('otro')).toContain('text-gray-700');
+  });
+});
 
 describe('DoctorSchedule', () => {
   it('renderiza el horario por defecto y muestra los totales correctos', () => {
